@@ -56,12 +56,7 @@ export async function createSubmission(req: AuthRequest, res: Response): Promise
       return;
     }
 
-    const { studentId, courseCode, repoUrl, submittedAt, score } = req.body;
-
-    if (typeof studentId !== 'number' || !Number.isInteger(studentId) || studentId <= 0) {
-      res.status(400).json({ message: 'studentId must be a positive integer.' });
-      return;
-    }
+    const { courseCode, repoUrl } = req.body;
 
     if (typeof courseCode !== 'string' || courseCode.trim().length < 2) {
       res.status(400).json({ message: 'courseCode is required and must be at least 2 characters.' });
@@ -73,23 +68,10 @@ export async function createSubmission(req: AuthRequest, res: Response): Promise
       return;
     }
 
-    if (submittedAt && Number.isNaN(new Date(submittedAt).getTime())) {
-      res.status(400).json({ message: 'submittedAt must be a valid date string.' });
-      return;
-    }
-
-    if (score !== undefined && (typeof score !== 'number' || score < 0 || score > 100)) {
-      res.status(400).json({ message: 'score must be a number between 0 and 100.' });
-      return;
-    }
-
     const submission = await Submission.create({
       ownerId: req.user.id,
-      studentId,
       courseCode: courseCode.trim().toUpperCase(),
       repoUrl,
-      submittedAt: submittedAt ? new Date(submittedAt) : new Date(),
-      score: score ?? 0,
     });
 
     res.status(201).json(submission);

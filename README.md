@@ -153,13 +153,12 @@ Request body:
 
 ```json
 {
-  "studentId": 1,
   "courseCode": "ITELECT4",
-  "repoUrl": "https://github.com/yourname/project",
-  "submittedAt": "2026-10-17T12:00:00.000Z",
-  "score": 0
+  "repoUrl": "https://github.com/yourname/project"
 }
 ```
+
+The authenticated user is recorded as the owner from the JWT. The API generates `submittedAt` and the default score; clients should not send `studentId` or a timestamp.
 
 ### Update a submission
 
@@ -285,11 +284,8 @@ Body:
 
 ```json
 {
-  "studentId": 1,
   "courseCode": "ITELECT4",
-  "repoUrl": "https://github.com/yourname/project",
-  "submittedAt": "2026-10-17T12:00:00.000Z",
-  "score": 0
+  "repoUrl": "https://github.com/yourname/project"
 }
 ```
 

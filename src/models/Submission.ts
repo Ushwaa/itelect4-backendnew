@@ -3,7 +3,6 @@ import type { Types } from 'mongoose';
 
 export interface ISubmission extends Document {
   ownerId: Types.ObjectId;
-  studentId: number;
   courseCode: string;
   repoUrl: string;
   submittedAt: Date;
@@ -19,11 +18,6 @@ const submissionSchema = new Schema(
       ref: 'User',
       required: true,
       select: false,
-    },
-    studentId: {
-      type: Number,
-      required: true,
-      min: 1,
     },
     courseCode: {
       type: String,
