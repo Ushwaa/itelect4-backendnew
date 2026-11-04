@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+import aiRoutes from './routes/ai';
 import submissionRoutes from './routes/submissionRoutes';
 import courseRoutes from './routes/courseRoutes';
 import { connectDB, isDbConnected } from './config/db';
@@ -10,11 +11,18 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 dotenv.config();
 
 const app = express();
-const configuredOrigin = process.env.CORS_ORIGIN?.trim();
-const allowedOrigins = new Set(
-  [configuredOrigin, process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:5173']
-    .filter((origin): origin is string => Boolean(origin))
-);
+const configuredOrigins = (process.env.CORS_ORIGIN ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = new Set([
+  ...configuredOrigins,
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:4173',
+]);
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
@@ -62,6 +70,7 @@ app.get('/api/health', healthCheck);
 
 app.use('/api/courses', courseRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
 app.use('/api/submissions', submissionRoutes);
 
 app.use(notFoundHandler);

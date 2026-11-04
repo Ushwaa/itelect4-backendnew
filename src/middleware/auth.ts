@@ -26,9 +26,13 @@ export function protectRoute(req: AuthRequest, res: Response, next: NextFunction
       email: decoded.email,
       username: decoded.username,
     };
+    req.userId = decoded.id;
 
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ message: 'Invalid or expired token.' });
   }
 }
+
+export const requireAuth = protectRoute;
+
