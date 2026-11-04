@@ -5,6 +5,7 @@ import type { ISubmission } from '../models/Submission';
 import type { ICourse } from '../models/Course';
 
 export type AuthRequest = Request & {
+  userId?: string;
   user?: {
     id: string;
     email: string;
